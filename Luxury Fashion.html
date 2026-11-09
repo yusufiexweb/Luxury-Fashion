@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOVA333X // Old-Money Heritage Studio</title>
+
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Syne:wght@700;800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+
+<!-- FontAwesome Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+html {
+overflow-x: clip;
+}
+
+:root {
+--accent-color: #f59e0b;
+--accent-glow: rgba(245, 158, 11, 0.3);
+--bg-base: #050507;
+}
+
+body {
+font-family: 'Space Grotesk', sans-serif;
+background-color: var(--bg-base);
+color: #ededed;
+cursor: none;
+overflow-x: hidden;
+}
+
+/* Custom Luxury Cursor */
+.cursor-dot, .cursor-circle {
+position: fixed;
+top: 0;
+left: 0;
+transform: translate(-50%, -50%);
+pointer-events: none !important;
+z-index: 999999;
+transition: transform 0.05s ease-out;
+}
+.cursor-dot {
+width: 8px;
+height: 8px;
+background-color: var(--accent-color);
+border-radius: 50%;
+box-shadow: 0 0 10px var(--accent-color);
+}
+.cursor-circle {
+width: 40px;
+height: 40px;
+border: 1px solid rgba(245, 158, 11, 0.5);
+border-radius: 50%;
+}
+
+.mono-text {
+font-family: 'JetBrains Mono', monospace;
+}
+
+.fitting-compact {
+display: none;
+}
+
+@media (hover: none), (pointer: coarse) {
+body {
+cursor: auto;
+}
+
+.cursor-dot,
+.cursor-circle {
+display: none;
+}
+}
+
+/* Studio Bag Drawer */
+.bag-drawer {
+transform: translateX(100%);
+transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.bag-drawer.open {
+transform: translateX(0);
+}
+
+/* Custom Toast Notification */
+#toastNotification {
+transform: translateY(100px);
+opacity: 0;
+transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+#toastNotification.show {
+transform: translateY(0);
+opacity: 1;
+}
+
+.modal-blur-bg {
+backdrop-filter: blur(12px);
+}
+
+::-webkit-scrollbar {
+width: 5px;
+}
+::-webkit-scrollbar-track {
+background: #050507;
+}
+::-webkit-scrollbar-thumb {
+background: var(--accent-color);
+}
+
+@media (max-width: 640px) {
+body {
+cursor: auto;
+}
+
+.cursor-dot,
+.cursor-circle {
+display: none;
+}
+
+header.fixed {
+gap: 0.75rem;
+padding: 0.75rem 1rem;
+}
+
+header.fixed > a {
+flex-shrink: 0;
+gap: 0.5rem;
+}
+
+header.fixed > div:last-child {
+min-width: 0;
+gap: 0.5rem;
+font-size: 10px;
+letter-spacing: 0.08em;
+}
+
+header.fixed > div:last-child > div {
+gap: 0.5rem;
+}
+
+#openBagBtn,
+#openFittingModal {
+min-height: 36px;
+padding: 0.5rem 0.65rem;
+font-size: 9px;
+white-space: nowrap;
+}
+
+.bag-brand,
+.fitting-full {
+display: none;
+}
+
+.fitting-compact {
+display: inline;
+}
+
+#perspective {
+padding: 8rem 1.125rem 3.5rem;
+}
+
+#perspective > .mono-text:first-child {
+font-size: 10px;
+letter-spacing: 0.12em;
+line-height: 1.6;
+}
+
+#perspective h2 {
+margin-bottom: 2.5rem;
+font-size: clamp(1.3rem, 6.2vw, 1.65rem);
+line-height: 1.12;
+letter-spacing: -0.045em;
+overflow-wrap: normal;
+}
+
+#perspective > .relative {
+padding: 2.25rem 0;
+}
+
+#perspective > .relative h1 {
+font-size: clamp(3.2rem, 15vw, 5rem);
+}
+
+#perspective > .relative span {
+max-width: calc(100% - 1rem);
+padding: 0.5rem 0.75rem;
+font-size: 9px;
+letter-spacing: 0.2em;
+line-height: 1.6;
+text-align: center;
+}
+
+#collections {
+padding: 3.5rem 1.125rem;
+}
+
+#collections h2,
+#transparency h2 {
+font-size: clamp(1.8rem, 8vw, 2.6rem);
+line-height: 1.1;
+}
+
+.filter-btn {
+padding: 0.55rem 0.7rem;
+font-size: 10px;
+}
+
+#transparency {
+padding: 3.5rem 1.125rem;
+}
+
+footer {
+padding: 3rem 1.125rem;
+}
+
+#bagDrawer {
+padding: 1.125rem;
+padding-bottom: max(1.125rem, env(safe-area-inset-bottom));
+}
+
+#fittingModal {
+align-items: flex-start;
+overflow-y: auto;
+padding: max(0.75rem, env(safe-area-inset-top)) 0.75rem max(0.75rem, env(safe-area-inset-bottom));
+}
+
+#fittingModal > div {
+width: 100%;
+max-height: calc(100dvh - 1.5rem);
+padding: 1.25rem;
+}
+
+#fittingModal h3 {
+max-width: calc(100% - 2rem);
+font-size: 1.25rem;
+line-height: 1.25;
+}
+
+#toastNotification {
+right: 1rem;
+bottom: max(1rem, env(safe-area-inset-bottom));
+left: 1rem;
+max-width: none;
+padding: 1rem;
+line-height: 1.5;
+}
+}
+
+@media (min-width: 641px) and (max-width: 900px) {
+header.fixed nav {
+display: none;
+}
+}
+
+@media (max-width: 380px) {
+header.fixed {
+gap: 0.4rem;
+padding-right: 0.75rem;
+padding-left: 0.75rem;
+}
+
+header.fixed > a > span:first-child {
+font-size: 15px;
+}
+
+#openBagBtn,
+#openFittingModal {
+padding-right: 0.45rem;
+padding-left: 0.45rem;
+font-size: 8px;
+}
+}
+</style>
+</head>
+<body class="selection:bg-amber-500 selection:text-black">
+
+<!-- Custom Cursor -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-circle" id="cursorCircle"></div>
+
+<!-- Toast Notification Box -->
+<div id="toastNotification" class="fixed bottom-6 right-6 z-[100005] bg-[#0a0a0f] border border-amber-500 px-6 py-4 shadow-2xl flex items-center gap-3 mono-text text-xs text-white">
+<i class="fa-solid fa-circle-check text-amber-500 text-base"></i>
+<span id="toastMessage">Action completed successfully.</span>
+</div>
+
+<!-- ================= HAUTE COUTURE PRELOADER ================= -->
+<div id="preloader" class="fixed inset-0 bg-[#050507] z-[100000] flex flex-col justify-between p-8 md:p-16 transition-all duration-700 select-none">
+<div class="flex justify-between items-center mono-text text-xs text-amber-500 uppercase tracking-widest border-b border-[#222] pb-4">
+<span>NOVA333X // ATELIER LOAD</span>
+<span>SYSTEM_INIT_0026</span>
+</div>
+
+<div class="my-auto text-center">
+<div class="font-['Syne'] text-5xl sm:text-7xl md:text-8xl font-extrabold text-white uppercase tracking-tighter mb-4">
+NOVA<span class="text-amber-500">333X.</span>
+</div>
+<div class="mono-text text-3xl font-extrabold text-amber-500 tracking-[0.3em]" id="preloaderCounter">0%</div>
+<p class="mono-text text-xs text-zinc-500 uppercase mt-3 tracking-widest">COMPOSING OLD-MONEY SILHOUETTES...</p>
+</div>
+
+<div class="flex justify-between items-end mono-text text-xs text-zinc-500 uppercase border-t border-[#222] pt-4">
+<span>BAKU // LONDON // MILAN</span>
+<span class="text-white">AWARDS CERTIFIED FRAMEWORK</span>
+</div>
+</div>
+
+<!-- ================= NAVBAR ================= -->
+<header class="fixed top-0 left-0 w-full z-50 bg-[#050507]/90 border-b border-[#1a1a1e] px-6 py-5 flex justify-between items-center backdrop-blur-md">
+<a href="#" class="flex items-center gap-4">
+<span class="font-['Syne'] font-extrabold text-lg tracking-tighter text-white uppercase">NOVA<span class="text-amber-500">333X.</span></span>
+<span class="hidden md:inline mono-text text-[10px] text-zinc-500 uppercase tracking-widest">// OLD-MONEY FASHION STUDIO // BAKU · LONDON</span>
+</a>
+
+<div class="flex items-center gap-8 text-xs uppercase tracking-widest font-mono font-medium">
+<nav class="hidden md:flex gap-6 text-zinc-400 items-center">
+<a href="#perspective" class="hover:text-white transition">Perspective</a>
+<a href="#collections" class="hover:text-white transition">Collections</a>
+<a href="#transparency" class="hover:text-white transition">Q&amp;A</a>
+</nav>
+
+<div class="flex items-center gap-4">
+<button id="openBagBtn" class="border border-zinc-700 hover:border-amber-500 px-4 py-2 hover:bg-amber-500 hover:text-black transition uppercase text-[11px] cursor-pointer flex items-center gap-2">
+<i class="fa-solid fa-bag-shopping" aria-hidden="true"></i> <span class="bag-brand">NOVA333X </span>Bag (<span id="bagCount">0</span>)
+</button>
+<button id="openFittingModal" class="bg-amber-500 text-black border border-amber-500 px-5 py-2 hover:bg-white hover:border-white transition uppercase text-[11px] font-bold cursor-pointer">
+<span class="fitting-full">Book Fitting</span><span class="fitting-compact">Fitting</span>
+</button>
+</div>
+</div>
+</header>
+
+<!-- ================= HERO SECTION ================= -->
+<section id="perspective" class="pt-40 pb-20 px-6 max-w-7xl mx-auto">
+<div class="mono-text text-xs text-amber-500 uppercase tracking-widest mb-4">// NOT JUST CLOTHING. A HERITAGE PERSPECTIVE.</div>
+<h2 class="font-['Syne'] text-3xl sm:text-5xl lg:text-6xl font-extrabold uppercase tracking-tight text-white max-w-4xl leading-tight mb-16">
+Because old-money garment architecture defines true timeless elegance.
+</h2>
+
+<div class="relative py-12 border-y border-zinc-800 my-12 overflow-hidden">
+<h1 class="font-['Syne'] text-7xl sm:text-9xl font-extrabold text-white/10 uppercase tracking-tighter text-center select-none hover:text-amber-500/20 transition duration-500">
+NOVA333X
+</h1>
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+<span class="mono-text text-xs tracking-[0.5em] text-amber-500 uppercase bg-[#050507] px-6 py-2 border border-zinc-800">
+OLD-MONEY HERITAGE // AUTUMN-WINTER 2026
+</span>
+</div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center mt-12">
+<div>
+<h3 class="font-['Syne'] text-2xl font-bold uppercase text-white mb-4">We construct quiet luxury.</h3>
+<p class="text-zinc-400 font-mono text-xs leading-relaxed">
+Featuring world-renowned old-money aesthetics inspired by Savile Row tailoring, Italian cashmere houses, and timeless heritage prestige. Curated specifically for elite clientele in Baku and global capitals.
+</p>
+</div>
+<div class="flex flex-wrap gap-4 justify-start md:justify-end mono-text text-[11px] text-zinc-400">
+<span class="px-4 py-2 border border-zinc-800 bg-[#0a0a0f]">| PURE CASHMERE</span>
+<span class="px-4 py-2 border border-zinc-800 bg-[#0a0a0f]">| SAVILE ROW CUT</span>
+<span class="px-4 py-2 border border-zinc-800 bg-[#0a0a0f]">| TIMELESS HERITAGE</span>
+</div>
+</div>
+</section>
+
+<!-- ================= COLLECTIONS / FEATURED PIECES (15 ITEMS) ================= -->
+<section id="collections" class="py-20 px-6 max-w-7xl mx-auto border-t border-zinc-800">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
+<div>
+<span class="mono-text text-xs text-amber-500 uppercase tracking-widest block mb-2">// ARCHIVE &amp; SELECTION (15 PIECES)</span>
+<h2 class="font-['Syne'] text-4xl sm:text-5xl font-extrabold uppercase text-white">Old-Money Collection</h2>
+</div>
+
+<!-- Filter Buttons -->
+<div class="flex flex-wrap gap-2 mono-text text-xs">
+<button class="filter-btn px-4 py-2 bg-amber-500 text-black font-bold uppercase transition cursor-pointer" data-filter="all">All (15)</button>
+<button class="filter-btn px-4 py-2 bg-[#0a0a0f] border border-zinc-800 text-zinc-400 hover:text-white uppercase transition cursor-pointer" data-filter="suits">Suits</button>
+<button class="filter-btn px-4 py-2 bg-[#0a0a0f] border border-zinc-800 text-zinc-400 hover:text-white uppercase transition cursor-pointer" data-filter="coats">Coats</button>
+<button class="filter-btn px-4 py-2 bg-[#0a0a0f] border border-zinc-800 text-zinc-400 hover:text-white uppercase transition cursor-pointer" data-filter="footwear">Footwear</button>
+<button class="filter-btn px-4 py-2 bg-[#0a0a0f] border border-zinc-800 text-zinc-400 hover:text-white uppercase transition cursor-pointer" data-filter="accessories">Accessories</button>
+</div>
+</div>
+
+<!-- Product Grid (15 Items) -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="productGrid">
+<!-- Dynamic products rendered via JS -->
+</div>
+</section>
+
+<!-- ================= TRANSPARENCY & Q&A ================= -->
+<section id="transparency" class="py-20 px-6 max-w-5xl mx-auto border-t border-zinc-800">
+<div class="text-center mb-16">
+<span class="mono-text text-xs text-amber-500 uppercase tracking-widest">// QUESTIONS WE ARE ASKED</span>
+<h2 class="font-['Syne'] text-4xl sm:text-5xl font-extrabold uppercase text-white mt-2">Atelier Transparency</h2>
+</div>
+
+<div class="space-y-4 mono-text text-xs">
+<div class="border border-zinc-800 bg-[#0a0a0f] p-6 cursor-pointer qa-accordion">
+<div class="flex justify-between items-center font-bold text-white text-sm">
+<span>What makes a NOVA333X garment unique?</span>
+<i class="fa-solid fa-plus text-amber-500"></i>
+</div>
+<p class="text-zinc-400 mt-4 leading-relaxed hidden qa-content">
+Every piece is built on architectural proportions using 100% natural European and Old-Money heritage textiles. Our tailors hand-stitch key strain points, ensuring lifelong durability and structural prestige.
+</p>
+</div>
+
+<div class="border border-zinc-800 bg-[#0a0a0f] p-6 cursor-pointer qa-accordion">
+<div class="flex justify-between items-center font-bold text-white text-sm">
+<span>How long does custom fitting take?</span>
+<i class="fa-solid fa-plus text-amber-500"></i>
+</div>
+<p class="text-zinc-400 mt-4 leading-relaxed hidden qa-content">
+Our private atelier tailoring service brings master Italian and London cutters directly to your residence or hotel suite within 7-14 business days.
+</p>
+</div>
+</div>
+</section>
+
+<!-- ================= FOOTER WITH SOCIAL ICONS ================= -->
+<footer class="border-t border-zinc-800 bg-[#030305] py-16 px-6">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center text-xs mono-text text-zinc-400 gap-8">
+<div>
+<h4 class="font-['Syne'] text-xl font-bold text-white uppercase mb-1">NOVA333X<span class="text-amber-500">.</span></h4>
+<p class="text-zinc-500">High-Fashion Haute Couture atelier engineered for visionaries and modern leaders.</p>
+</div>
+<div class="space-y-2">
+<div class="text-amber-500 font-bold uppercase">ATELIER SERVICES</div>
+<div>Bespoke Tailoring &amp; Measurements</div>
+<div>Private Styling in Baku &amp; London</div>
+</div>
+<!-- Social Links with Icons -->
+<div class="space-y-3">
+<div class="text-amber-500 font-bold uppercase">CONNECT &amp; DEVELOPER</div>
+<div class="flex flex-col gap-2">
+<a href="https://www.upwork.com" target="_blank" class="hover:text-amber-500 transition flex items-center gap-2">
+<i class="fa-solid fa-briefcase text-amber-500"></i> Upwork Freelance
+</a>
+<a href="https://www.linkedin.com" target="_blank" class="hover:text-amber-500 transition flex items-center gap-2">
+<i class="fa-brands fa-linkedin text-amber-500"></i> LinkedIn Network
+</a>
+<a href="https://github.com/yusufiexweb" target="_blank" class="hover:text-amber-500 transition flex items-center gap-2">
+<i class="fa-brands fa-github text-amber-500"></i> GitHub // yusufiexweb
+</a>
+</div>
+</div>
+<div>&copy; 2026 NOVA333X STUDIO. ALL RIGHTS RESERVED.</div>
+</div>
+</footer>
+
+<!-- ================= PRODUCT DETAILS MODAL ================= -->
+<div id="productDetailModal" class="fixed inset-0 bg-black/90 modal-blur-bg z-[100003] flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
+<div class="bg-[#08080c] border border-zinc-800 w-full max-w-3xl p-6 sm:p-8 relative shadow-2xl my-auto max-h-[90vh] overflow-y-auto">
+<button id="closeDetailModal" class="absolute top-4 right-4 w-8 h-8 bg-zinc-900 text-white font-bold flex items-center justify-center hover:bg-amber-500 hover:text-black transition cursor-pointer">&times;</button>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+<div class="aspect-[4/5] bg-black border border-zinc-800 overflow-hidden">
+<img id="modalProductImg" src="" class="w-full h-full object-cover">
+</div>
+
+<div class="space-y-6 mono-text">
+<div>
+<span id="modalProductTag" class="text-[10px] text-amber-500 uppercase tracking-widest block mb-1">SAVILE ROW HERITAGE</span>
+<h3 id="modalProductTitle" class="font-['Syne'] text-2xl font-bold uppercase text-white">Product Title</h3>
+<div id="modalProductPrice" class="text-xl font-bold text-amber-500 mt-2">$0</div>
+</div>
+
+<div class="border-y border-zinc-800 py-4 space-y-2 text-xs text-zinc-300">
+<div class="flex justify-between"><span class="text-zinc-500">Country of Origin:</span><span id="modalProductCountry" class="text-white font-bold">United Kingdom</span></div>
+<div class="flex justify-between"><span class="text-zinc-500">Material Composition:</span><span id="modalProductMaterial" class="text-white font-bold">100% Super 150s Wool</span></div>
+<div class="flex justify-between"><span class="text-zinc-500">Atelier Workshop:</span><span id="modalProductWorkshop" class="text-white font-bold">Savile Row, London</span></div>
+</div>
+
+<p id="modalProductDesc" class="text-xs text-zinc-400 leading-relaxed">
+Crafted according to timeless old-money tailoring traditions. Hand-finished seams and structured silhouette design.
+</p>
+
+<!-- Sizes -->
+<div>
+<label class="text-xs text-zinc-400 uppercase block mb-2">Select Size:</label>
+<div id="sizeOptionsContainer" class="flex flex-wrap gap-2 text-xs">
+<!-- Rendered dynamically based on type -->
+</div>
+</div>
+
+<button id="modalAddBtn" class="w-full bg-amber-500 text-black py-4 font-bold uppercase tracking-widest hover:bg-white transition cursor-pointer text-xs">
+Add to NOVA333X Bag
+</button>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ================= NOVA333X BAG DRAWER ================= -->
+<div id="bagDrawer" class="bag-drawer fixed top-0 right-0 w-full max-w-md h-full bg-[#08080c] border-l border-zinc-800 z-[100004] flex flex-col justify-between p-6 shadow-2xl">
+<div>
+<div class="flex justify-between items-center border-b border-zinc-800 pb-4 mb-6">
+<h3 class="font-['Syne'] text-xl font-bold uppercase text-white flex items-center gap-2">
+<i class="fa-solid fa-bag-shopping text-amber-500"></i> NOVA333X Bag
+</h3>
+<button id="closeBagBtn" class="w-8 h-8 bg-zinc-900 text-white font-bold flex items-center justify-center hover:bg-amber-500 hover:text-black transition cursor-pointer">&times;</button>
+</div>
+
+<div id="bagItemsContainer" class="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
+<div class="text-center py-12 text-zinc-500 mono-text text-xs">
+<i class="fa-solid fa-basket-shopping text-4xl mb-3 text-zinc-700"></i>
+<p>YOUR NOVA333X BAG IS EMPTY</p>
+<span class="text-[10px] text-zinc-600">Select garments from archive to populate.</span>
+</div>
+</div>
+</div>
+
+<div class="border-t border-zinc-800 pt-6">
+<div class="flex justify-between items-center mb-4 mono-text text-sm">
+<span class="text-zinc-400">Total Valuation:</span>
+<span id="bagTotal" class="text-white font-bold text-lg">$0</span>
+</div>
+<button id="checkoutBtn" class="w-full bg-amber-500 text-black py-4 font-bold uppercase tracking-widest hover:bg-white transition cursor-pointer mono-text text-xs">
+Proceed to Order Form <i class="fa-solid fa-arrow-right ml-2"></i>
+</button>
+</div>
+</div>
+
+<!-- ================= BOOK FITTING MODAL ================= -->
+<div id="fittingModal" class="fixed inset-0 bg-black/90 modal-blur-bg z-[100003] flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
+<div class="bg-[#08080c] border border-zinc-800 w-full max-w-lg max-h-[calc(100vh-2rem)] overflow-y-auto p-8 relative shadow-2xl">
+<button id="closeFittingModal" class="absolute top-4 right-4 w-8 h-8 bg-zinc-900 text-white font-bold flex items-center justify-center hover:bg-amber-500 hover:text-black transition cursor-pointer">&times;</button>
+<div class="mb-6">
+<span class="mono-text text-[10px] text-amber-500 uppercase">// PRIVATE APPOINTMENT</span>
+<h3 class="font-['Syne'] text-2xl font-bold uppercase text-white mt-1">Book Bespoke Fitting</h3>
+</div>
+
+<form id="fittingForm" class="space-y-4 font-mono text-xs">
+<div>
+<label class="text-zinc-400 uppercase block mb-1">Full Name</label>
+<input type="text" required placeholder="John Doe" class="w-full bg-black border border-zinc-800 p-3 text-white focus:border-amber-500 focus:outline-none">
+</div>
+<div>
+<label class="text-zinc-400 uppercase block mb-1">Phone / WhatsApp</label>
+<input type="text" required placeholder="+994 50 000 00 00" class="w-full bg-black border border-zinc-800 p-3 text-white focus:border-amber-500 focus:outline-none">
+</div>
+<div>
+<label for="fittingEmail" class="text-zinc-400 uppercase block mb-1">Email address</label>
+<input id="fittingEmail" name="email" type="email" required autocomplete="email" placeholder="you@example.com" class="w-full bg-black border border-zinc-800 p-3 text-white focus:border-amber-500 focus:outline-none">
+</div>
+<div>
+<label for="fittingCountry" class="text-zinc-400 uppercase block mb-1">Country or region</label>
+<select id="fittingCountry" name="country" autocomplete="country-name" required class="w-full bg-black border border-zinc-800 p-3 text-white focus:border-amber-500 focus:outline-none cursor-pointer">
+<option value="" disabled selected>Select your country...</option>
+</select>
+</div>
+<div>
+<label class="text-zinc-400 uppercase block mb-1">Preferred Location</label>
+<select required class="w-full bg-black border border-zinc-800 p-3 text-white focus:border-amber-500 focus:outline-none cursor-pointer">
+<option value="" disabled selected>Select location...</option>
+<option value="baku">Baku Private Atelier (Nizami St.)</option>
+<option value="hotel">Hotel Suite Visit (Baku)</option>
+<option value="london">London Flagship Showroom</option>
+</select>
+</div>
+<button type="submit" class="w-full bg-amber-500 text-black p-4 font-bold uppercase tracking-widest hover:bg-white transition cursor-pointer">
+Confirm Appointment Request
+</button>
+</form>
+</div>
+</div>
+
+<!-- country-city-data.js optional – preloader no longer blocked if missing -->
+<script src="country-city-data.js" onerror="console.warn('country-city-data.js not found, using fallback')"></script>
+<!-- ================= JAVASCRIPT LOGIC ================= -->
+<script>
+// 15 Old-Money Products Data Array
+const productsData = [
+{ id: 1, name: "Savile Row Charcoal Pinstripe Suit", category: "suits", type: "clothing", price: 2650, tag: "SAVILE ROW HERITAGE", country: "United Kingdom", material: "100% Super 150s Merino Wool", workshop: "Savile Row, London", img: "https://i.pinimg.com/1200x/af/6f/67/af6f679c98137a9ecd826e1ac280e047.jpg", desc: "Engineered with traditional double-canvas construction for a sharp, executive silhouette." },
+{ id: 2, name: "Italian Camel Hair Polo Coat", category: "coats", type: "clothing", price: 3400, tag: "MILAN CASHMERE HOUSE", country: "Italy", material: "100% Baby Camel Hair", workshop: "Via Montenapoleone, Milan", img: "https://i.pinimg.com/736x/a1/9b/97/a19b975813cb1675e91aa1489a0881ff.jpg", desc: "Luxuriously soft and insulating overcoat designed for winter formal gatherings." },
+{ id: 3, name: "Handcrafted Oxford Calf Leather Shoes", category: "footwear", type: "shoes", price: 1650, tag: "LONDON SHOEMAKERS", country: "United Kingdom", material: "Full-Grain Calfskin Leather", workshop: "Northampton, UK", img: "https://i.pinimg.com/736x/3a/e4/4a/3ae44a8a2f79b23a7eaec80cefaf9a31.jpg", desc: "Goodyear welted with hand-carved leather soles for supreme comfort and lifetime longevity." },
+{ id: 4, name: "Prince of Wales Double-Breasted Suit", category: "suits", type: "clothing", price: 2900, tag: "BRITISH HERITAGE", country: "Scotland", material: "Highland Tweed Wool", workshop: "Edinburgh, Scotland", img: "https://i.pinimg.com/1200x/d8/69/5a/d8695ae08953c3a4a922df49288883b0.jpg", desc: "Classic British royalty pattern tailored for formal boardrooms and evening galas." },
+{ id: 5, name: "Edinburgh Tweed Field Coat", category: "coats", type: "clothing", price: 2100, tag: "SCOTTISH TWEED", country: "Scotland", material: "100% Harris Tweed", workshop: "Highlands Workshop", img: "https://i.pinimg.com/1200x/59/0d/a2/590da2b668b8ccd6632928b0f11a378d.jpg", desc: "Water-resistant traditional field jacket with horn buttons and suede trim." },
+{ id: 6, name: "Mayfair Suede Chelsea Boots", category: "footwear", type: "shoes", price: 1850, tag: "MAYFAIR WORKSHOP", country: "United Kingdom", material: "Italian Calf Suede", workshop: "Mayfair, London", img: "https://i.pinimg.com/1200x/a5/17/52/a51752a9e2ee0a3b4f9e51903465801a.jpg", desc: "Hand-finished suede dress boots ideal for smart-casual tailoring ensembles." },
+{ id: 7, name: "Como Silk Heritage Pocket Square", category: "accessories", type: "accessory", price: 220, tag: "COMO SILK MILL", country: "Italy", material: "100% Mulberry Silk", workshop: "Lake Como, Italy", img: "https://i.pinimg.com/1200x/45/bd/8b/45bd8b157b2599af834c9925b6468421.jpg", desc: "Hand-rolled edges with vintage paisley motif printed in Lake Como mills." },
+{ id: 8, name: "Milan Navy Flannel Three-Piece Suit", category: "suits", type: "clothing", price: 3150, tag: "MILAN TAILORING", country: "Italy", material: "Worsted Wool Flannel", workshop: "Milan Atelier", img: "https://i.pinimg.com/1200x/92/0a/fd/920afd76d176b322e0ec644b0aec1b76.jpg", desc: "Sartorial Italian shoulder expression paired with a tailored single-breasted waistcoat." },
+{ id: 9, name: "Kensington Cashmere Trench Coat", category: "coats", type: "clothing", price: 2950, tag: "KENSINGTON ATELIER", country: "United Kingdom", material: "Cashmere & Cotton Gabardine", workshop: "Kensington, London", img: "https://i.pinimg.com/736x/fd/f3/d3/fdf3d3055c109872dcf0f3451096bea2.jpg", desc: "Double-breasted storm flap silhouette tailored with plush cashmere lining." },
+{ id: 10, name: "Belgian Suede Monk Strap Shoes", category: "footwear", type: "shoes", price: 1720, tag: "BRUSSELS WORKSHOP", country: "Belgium", material: "Velvet Suede & Solid Brass", workshop: "Brussels, Belgium", img: "https://i.pinimg.com/736x/bd/b6/06/bdb606a27d72b0b103292d562ea22d8b.jpg", desc: "Single buckle monk strap shoes with antiqued brass fittings." },
+{ id: 11, name: "Vintage Gold Cufflinks & Tie Bar Set", category: "accessories", type: "accessory", price: 450, tag: "GENEVA GOLDSMITH", country: "Switzerland", material: "18k Gold Plated Brass", workshop: "Geneva, Switzerland", img: "https://i.pinimg.com/1200x/2d/1a/71/2d1a71a2ccfaf9ebedfb4c6dac50631b.jpg", desc: "Engine-turned engraving pattern crafted by master Swiss goldsmiths." },
+{ id: 12, name: "Oxford Houndstooth Business Suit", category: "suits", type: "clothing", price: 2550, tag: "OXFORD TAILORS", country: "United Kingdom", material: "Super 140s Saxon Wool", workshop: "Oxford, UK", img: "https://cdn.suitsupply.com/image/upload/t_pdp-hero-default-desktop/f_auto,q_auto,w_1296/products/suits/default/summer/p7232_1", desc: "Micro-houndstooth weave designed for sharp academic and executive presence." },
+{ id: 13, name: "Mayfair Shearling Collar Peacoat", category: "coats", type: "clothing", price: 3200, tag: "MAYFAIR ATELIER", country: "United Kingdom", material: "Melton Wool & Shearling", workshop: "London, UK", img: "https://cdn.suitsupply.com/image/upload/t_pdp-hero-default-desktop/f_auto,q_auto,w_1296/products/coats/default/winter/j1069_1", desc: "Heavyweight naval-style peacoat featuring removable Spanish shearling collar." },
+{ id: 14, name: "Florence Full-Grain Loafers", category: "footwear", type: "shoes", price: 1480, tag: "FLORENCE LEATHER LAB", country: "Italy", material: "Tuscan Leather", workshop: "Florence, Italy", img: "https://borrominifirenze.it/cdn/shop/files/mocassino-in-camoscio-camoscio-12262ns-02-495e0c167c.jpg?v=1792767451&width=535", desc: "Hand-patinated dress loafers with Blake-stitched sole architecture." },
+{ id: 15, name: "Tuscan Leather Briefcase", category: "accessories", type: "accessory", price: 2300, tag: "TUSCAN ARTISANS", country: "Italy", material: "Vegetable-Tanned Cowhide", workshop: "Florence, Italy", img: "https://i.pinimg.com/736x/2f/3c/d6/2f3cd6d97ebbf40e6dc6a6561a8b7f1b.jpg", desc: "Structured business folio briefcase with custom combination security locks." },
+{ id: 16, name: "Edinburgh Cashmere Tuxedo", category: "suits", type: "clothing", price: 3500, tag: "EDINBURGH GALA", country: "Scotland", material: "Cashmere & Grosgrain Silk", workshop: "Edinburgh, Scotland", img: "https://www.chanchala.co.uk/cdn/shop/products/monogrammed-mens-gift-set-sterling-silver-cufflinks-and-tie-bar-00_800x.jpg?v=1573330682", desc: "Black-tie evening suit with silk lapels and satin side stripes." },
+{ id: 17, name: "Vienna Double-Faced Wool Coat", category: "coats", type: "clothing", price: 2780, tag: "VIENNA ATELIER", country: "Austria", material: "Alpine Virgin Wool", workshop: "Vienna, Austria", img: "https://trussardi.com/cdn/shop/files/R304A000787N0C9_01I_c15d6360-d391-4d47-bf07-a59fb2790b11.jpg?v=1792669316&width=600", desc: "Seamless unlined double-face construction providing lightweight warmth." },
+{ id: 18, name: "Venetian Velvet Slippers", category: "footwear", type: "shoes", price: 1250, tag: "VENICE SHOEMAKERS", country: "Italy", material: "Cotton Velvet & Quilted Silk", workshop: "Venice, Italy", img: "https://i.pinimg.com/736x/50/34/e7/5034e72ac968ca7a0685b18de78a82a4.jpg", desc: "Embroidered heraldic crest slippers lined with cushioned silk lining." },
+{ id: 19, name: "Scottish Cashmere Winter Scarf", category: "accessories", type: "accessory", price: 380, tag: "HIGHLAND CASHMERE", country: "Scotland", material: "100% Loro Piana Cashmere", workshop: "Scottish Borders", img: "https://www.kiltane.com/cdn/shop/files/sc160025_f19001_02.jpg?v=1709654214&width=750", desc: "Woven on vintage looms with ripple finish and hand-twisted fringe." },
+{ id: 20, name: "Mayfair Estate Check Suit", category: "suits", type: "clothing", price: 2750, tag: "MAYFAIR TAILORING", country: "United Kingdom", material: "Super 130s Wool", workshop: "London, UK", img: "https://cdn.webshopapp.com/shops/268192/files/502177014/640x800x1/cavani-mayfair-navy-check-suit-for-men-3-piece-sui.jpg", desc: "Subtle glen plaid pattern designed for countryside estates and city meetings." },
+{ id: 21, name: "Milan Alpaca Blend Overcoat", category: "coats", type: "clothing", price: 3300, tag: "MILAN ATELIER", country: "Italy", material: "Royal Alpaca & Wool", workshop: "Milan, Italy", img: "https://www.maximilian.com/cdn/shop/files/I25453LARA88_DARKGREY_5_960x_crop_center.jpg?v=1760560032", desc: "Deep charcoal tone with rich texture and horn button closures." },
+{ id: 22, name: "Brogue Wingtip Heritage Boots", category: "footwear", type: "shoes", price: 1950, tag: "BRITISH WORKSHOP", country: "United Kingdom", material: "Burnished Grain Leather", workshop: "Northampton, UK", img: "https://www.thejacketmaker.com/cdn/shop/products/01_Duster_Brogues_Derby_Black_Leather_Boots_Front_Tilted-2-1674459085175_6ece393d-30dc-464f-8376-1921c984f0a3_1080x.webp?v=1756910236", desc: "Country brogue ankle boots built with storm welt protection." },
+{ id: 23, name: "Swiss Automatic Dress Watch", category: "accessories", type: "accessory", price: 4800, tag: "GENEVA HOROLOGY", country: "Switzerland", material: "316L Stainless Steel & Sapphire", workshop: "Geneva, Switzerland", img: "https://i.ebayimg.com/images/g/tG4AAeSwQX1q39oQ/s-l960.webp", desc: "Minimalist dial with crocodile leather strap and 72-hour power reserve." },
+{ id: 24, name: "Florence Silk-Lined Wool Suit", category: "suits", type: "clothing", price: 2850, tag: "FLORENCE ATELIER", country: "Italy", material: "Florentine Wool & Silk", workshop: "Florence, Italy", img: "https://cdn.hangrr.com/v7/s3/product/521/florence-sky-blue-wool-suit-multi.webp", desc: "Unstructured Neapolitan shoulder construction with dual rear vents." },
+{ id: 25, name: "Caspian Heavyweight Wool Overcoat", category: "coats", type: "clothing", price: 3100, tag: "CASPIAN HERITAGE", country: "Azerbaijan", material: "Virgin Wool & Silk Lined", workshop: "Baku Atelier", img: "https://atelieroliver.com/cdn/shop/files/import-1_de69a2a5-26e0-435a-af41-a02236525962.png?v=1790793846&width=1100", desc: "Tailored specially for Baku winds with reinforced collar structure." },
+{ id: 26, name: "Milano Dress Jodhpur Boots", category: "footwear", type: "shoes", price: 1890, tag: "MILANO SHOEMAKERS", country: "Italy", material: "Smooth Calfskin", workshop: "Milan, Italy", img: "https://www.passisovrani.com/cdn/shop/files/B-753-DKBRN_1.jpg?v=1760546661&width=713", desc: "Equestrian-inspired dress boots with wraparound ankle strap." },
+{ id: 27, name: "Pure Cashmere Ribbed Beanie", category: "accessories", type: "accessory", price: 290, tag: "HIGHLAND KNITS", country: "Scotland", material: "100% Mongolian Cashmere", workshop: "Scotland, UK", img: "https://assets-cf.armani.com/image/upload/f_auto,q_auto:best,ar_4:5,w_1024,c_fill/EM001910_AF15454_U1129_F_FW2025.jpg", desc: "Ultra-warm ribbed knit design in classic navy tone." },
+{ id: 28, name: "Baku Obsidian Executive Suit", category: "suits", type: "clothing", price: 2950, tag: "BAKU ATELIER", country: "Azerbaijan", material: "Super 160s Silk-Wool", workshop: "Nizami St, Baku", img: "https://xcdn.next.co.uk/common/items/default/default/itemimages/3_4Ratio/product/lge/520384s.jpg?im=Resize,width=750", desc: "Custom bespoke tailoring for high-profile executive engagements." },
+{ id: 29, name: "London Gentleman Trench", category: "coats", type: "clothing", price: 2800, tag: "LONDON HERITAGE", country: "United Kingdom", material: "Weatherproof Gabardine", workshop: "London, UK", img: "https://cdn.suitdirect.co.uk/upload/siteimages/xlarge/0080219_270_b.jpg", desc: "Classic belted trench coat with brass hardware buckles." },
+{ id: 30, name: "Tuscan Brogue Formal Shoes", category: "footwear", type: "shoes", price: 1680, tag: "TUSCAN WORKSHOP", country: "Italy", material: "Hand-Patinated Leather", workshop: "Florence, Italy", img: "https://zalcaro.com/cdn/shop/files/Men_sBlackLeatherWingtipOxfordBrogues_PremiumItalianFormalDressShoes_059b9a65-eeb6-4293-8037-f0ab55dd2e6a.png?v=1782558187&width=832", desc: "Precision perforations and burnished toe cap." }
+].slice(0, 15);
+
+document.addEventListener("DOMContentLoaded", function () {
+
+// Country select – safe fallback so missing country-city-data.js never blocks the page
+const fittingCountry = document.getElementById("fittingCountry");
+const countryData = window.NOVA333X_COUNTRY_CITY_DATA;
+const fallbackCountries = [
+{ code: "AZ", name: "Azerbaijan" },
+{ code: "GB", name: "United Kingdom" },
+{ code: "IT", name: "Italy" },
+{ code: "TR", name: "Turkey" },
+{ code: "US", name: "United States" },
+{ code: "DE", name: "Germany" },
+{ code: "FR", name: "France" },
+{ code: "AE", name: "United Arab Emirates" },
+{ code: "RU", name: "Russia" },
+{ code: "CH", name: "Switzerland" }
+];
+const countriesToUse = (Array.isArray(countryData) && countryData.length > 0)
+? countryData
+: fallbackCountries;
+countriesToUse.forEach(country => {
+const option = document.createElement("option");
+option.value = country.code || country.name;
+option.textContent = country.name;
+fittingCountry.appendChild(option);
+});
+
+// Toast Notification Helper
+function showToast(message) {
+const toast = document.getElementById("toastNotification");
+document.getElementById("toastMessage").textContent = message;
+toast.classList.add("show");
+setTimeout(() => {
+toast.classList.remove("show");
+}, 3000);
+}
+
+// Preloader Simulation – always finishes, even if other scripts fail
+const preloader = document.getElementById("preloader");
+const preloaderCounter = document.getElementById("preloaderCounter");
+let percent = 0;
+let preloaderDone = false;
+
+function hidePreloader() {
+if (preloaderDone) return;
+preloaderDone = true;
+preloaderCounter.textContent = "100%";
+preloader.style.opacity = "0";
+setTimeout(() => {
+preloader.style.display = "none";
+preloader.style.pointerEvents = "none";
+}, 600);
+}
+
+const loadInterval = setInterval(() => {
+percent += Math.floor(Math.random() * 12) + 8;
+if (percent >= 100) {
+percent = 100;
+clearInterval(loadInterval);
+setTimeout(hidePreloader, 350);
+} else {
+preloaderCounter.textContent = percent + "%";
+}
+}, 45);
+
+// Safety: force-hide preloader after 3.5s no matter what
+setTimeout(hidePreloader, 3500);
+
+// Custom Cursor
+const cursorDot = document.getElementById("cursorDot");
+const cursorCircle = document.getElementById("cursorCircle");
+let mouseX = 0, mouseY = 0, circleX = 0, circleY = 0;
+
+window.addEventListener("mousemove", (e) => {
+mouseX = e.clientX;
+mouseY = e.clientY;
+cursorDot.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%)`;
+});
+
+function renderCursor() {
+circleX += (mouseX - circleX) * 0.25;
+circleY += (mouseY - circleY) * 0.25;
+cursorCircle.style.transform = `translate(${circleX}px, ${circleY}px) translate(-50%, -50%)`;
+requestAnimationFrame(renderCursor);
+}
+renderCursor();
+
+// Render Products to Grid
+const productGrid = document.getElementById("productGrid");
+function renderProducts(items) {
+productGrid.innerHTML = "";
+items.forEach(product => {
+productGrid.innerHTML += `
+<div class="product-card border border-zinc-800 bg-[#0a0a0f] group cursor-pointer" data-id="${product.id}" data-category="${product.category}">
+<div class="aspect-[4/5] overflow-hidden relative bg-black">
+<img src="${product.img}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+<button class="quick-add-btn absolute bottom-4 left-4 right-4 bg-amber-500 text-black py-3 mono-text text-xs font-bold uppercase opacity-0 group-hover:opacity-100 transition duration-300 cursor-pointer shadow-lg" data-id="${product.id}">
+QUICK ADD ($${product.price.toLocaleString()})
+</button>
+</div>
+<div class="p-6">
+<span class="mono-text text-[10px] text-amber-500 uppercase">${product.tag}</span>
+<h3 class="font-['Syne'] text-lg font-bold text-white mt-1 mb-2">${product.name}</h3>
+<div class="mono-text text-sm text-zinc-300 font-bold">$${product.price.toLocaleString()}</div>
+</div>
+</div>
+`;
+});
+
+attachCardEvents();
+}
+
+renderProducts(productsData);
+
+// Filter Products
+const filterBtns = document.querySelectorAll(".filter-btn");
+filterBtns.forEach(btn => {
+btn.addEventListener("click", () => {
+filterBtns.forEach(b => {
+b.classList.remove("bg-amber-500", "text-black", "font-bold");
+b.classList.add("bg-[#0a0a0f]", "text-zinc-400");
+});
+btn.classList.add("bg-amber-500", "text-black", "font-bold");
+btn.classList.remove("bg-[#0a0a0f]", "text-zinc-400");
+
+const category = btn.getAttribute("data-filter");
+if(category === 'all') {
+renderProducts(productsData);
+} else {
+const filtered = productsData.filter(p => p.category === category);
+renderProducts(filtered);
+}
+});
+});
+
+// Product Details Modal & Size Logic
+const detailModal = document.getElementById("productDetailModal");
+let selectedProduct = null;
+let selectedSize = "";
+
+function attachCardEvents() {
+document.querySelectorAll(".product-card").forEach(card => {
+card.addEventListener("click", (e) => {
+if (e.target.classList.contains("quick-add-btn")) return;
+const id = parseInt(card.getAttribute("data-id"));
+openProductModal(id);
+});
+});
+
+document.querySelectorAll(".quick-add-btn").forEach(btn => {
+btn.addEventListener("click", (e) => {
+e.stopPropagation();
+const id = parseInt(btn.getAttribute("data-id"));
+const p = productsData.find(item => item.id === id);
+let defaultSize = p.type === 'shoes' ? '42' : (p.type === 'clothing' ? 'M' : 'STANDARD');
+addToBag(p, defaultSize);
+});
+});
+}
+
+function openProductModal(id) {
+selectedProduct = productsData.find(p => p.id === id);
+if (!selectedProduct) return;
+
+document.getElementById("modalProductImg").src = selectedProduct.img;
+document.getElementById("modalProductTag").textContent = selectedProduct.tag;
+document.getElementById("modalProductTitle").textContent = selectedProduct.name;
+document.getElementById("modalProductPrice").textContent = "$" + selectedProduct.price.toLocaleString();
+document.getElementById("modalProductCountry").textContent = selectedProduct.country;
+document.getElementById("modalProductMaterial").textContent = selectedProduct.material;
+document.getElementById("modalProductWorkshop").textContent = selectedProduct.workshop;
+document.getElementById("modalProductDesc").textContent = selectedProduct.desc;
+
+// Build size options based on product type
+const sizeContainer = document.getElementById("sizeOptionsContainer");
+sizeContainer.innerHTML = "";
+
+let sizes = [];
+if (selectedProduct.type === 'clothing') sizes = ['S', 'M', 'L', 'XL', 'XXL'];
+else if (selectedProduct.type === 'shoes') sizes = ['40', '41', '42', '43', '44', '45'];
+else sizes = ['ONE SIZE'];
+
+selectedSize = sizes[0];
+
+sizes.forEach((sz, idx) => {
+const btn = document.createElement("button");
+btn.className = `size-btn px-4 py-2 border border-zinc-700 uppercase font-bold cursor-pointer transition ${idx === 0 ? 'bg-amber-500 text-black border-amber-500' : 'bg-black text-white hover:border-amber-500'}`;
+btn.textContent = sz;
+btn.addEventListener("click", () => {
+document.querySelectorAll(".size-btn").forEach(b => {
+b.className = "size-btn px-4 py-2 border border-zinc-700 bg-black text-white uppercase font-bold cursor-pointer transition hover:border-amber-500";
+});
+btn.className = "size-btn px-4 py-2 border border-amber-500 bg-amber-500 text-black uppercase font-bold cursor-pointer transition";
+selectedSize = sz;
+});
+sizeContainer.appendChild(btn);
+});
+
+detailModal.classList.remove("opacity-0", "pointer-events-none");
+}
+
+document.getElementById("closeDetailModal").addEventListener("click", () => {
+detailModal.classList.add("opacity-0", "pointer-events-none");
+});
+
+document.getElementById("modalAddBtn").addEventListener("click", () => {
+if (selectedProduct) {
+addToBag(selectedProduct, selectedSize);
+detailModal.classList.add("opacity-0", "pointer-events-none");
+}
+});
+
+// NOVA333X Bag Logic
+let bagItems = [];
+const bagDrawer = document.getElementById("bagDrawer");
+const bagCount = document.getElementById("bagCount");
+const bagTotal = document.getElementById("bagTotal");
+const bagItemsContainer = document.getElementById("bagItemsContainer");
+
+document.getElementById("openBagBtn").addEventListener("click", () => bagDrawer.classList.add("open"));
+document.getElementById("closeBagBtn").addEventListener("click", () => bagDrawer.classList.remove("open"));
+
+function addToBag(product, size) {
+const existing = bagItems.find(item => item.id === product.id && item.size === size);
+if(existing) {
+existing.qty += 1;
+} else {
+bagItems.push({ id: product.id, name: product.name, price: product.price, img: product.img, size: size, qty: 1 });
+}
+updateBagUI();
+bagDrawer.classList.add("open");
+showToast(`${product.name} [Size: ${size}] added to your NOVA333X Bag.`);
+}
+
+function updateBagUI() {
+bagCount.textContent = bagItems.reduce((acc, item) => acc + item.qty, 0);
+const total = bagItems.reduce((acc, item) => acc + (item.price * item.qty), 0);
+bagTotal.textContent = "$" + total.toLocaleString();
+
+if(bagItems.length === 0) {
+bagItemsContainer.innerHTML = `
+<div class="text-center py-12 text-zinc-500 mono-text text-xs">
+<i class="fa-solid fa-basket-shopping text-4xl mb-3 text-zinc-700"></i>
+<p>YOUR NOVA333X BAG IS EMPTY</p>
+<span class="text-[10px] text-zinc-600">Select garments from archive to populate.</span>
+</div>
+`;
+return;
+}
+
+bagItemsContainer.innerHTML = "";
+bagItems.forEach((item, index) => {
+bagItemsContainer.innerHTML += `
+<div class="flex items-center justify-between bg-black border border-zinc-800 p-3">
+<div class="flex items-center gap-3">
+<img src="${item.img}" class="w-12 h-12 object-cover">
+<div>
+<div class="font-['Syne'] text-xs font-bold text-white">${item.name}</div>
+<div class="mono-text text-[10px] text-amber-500">$${item.price.toLocaleString()} x ${item.qty} | Size: ${item.size}</div>
+</div>
+</div>
+<button onclick="removeItem(${index})" class="text-zinc-500 hover:text-red-500 px-2 cursor-pointer">&times;</button>
+</div>
+`;
+});
+}
+
+window.removeItem = function(index) {
+bagItems.splice(index, 1);
+updateBagUI();
+showToast("Item removed from bag.");
+};
+
+document.getElementById("checkoutBtn").addEventListener("click", () => {
+if(bagItems.length === 0) {
+showToast("Your NOVA333X Bag is empty.");
+return;
+}
+showToast("Order successfully placed! Atelier concierge will contact you.");
+bagItems = [];
+updateBagUI();
+bagDrawer.classList.remove("open");
+});
+
+// QA Accordion
+document.querySelectorAll(".qa-accordion").forEach(acc => {
+acc.addEventListener("click", () => {
+const content = acc.querySelector(".qa-content");
+const icon = acc.querySelector("i");
+content.classList.toggle("hidden");
+icon.classList.toggle("fa-plus");
+icon.classList.toggle("fa-minus");
+});
+});
+
+// Book Fitting Modal
+const fittingModal = document.getElementById("fittingModal");
+document.getElementById("openFittingModal").addEventListener("click", () => {
+fittingModal.classList.remove("opacity-0", "pointer-events-none");
+});
+document.getElementById("closeFittingModal").addEventListener("click", () => {
+fittingModal.classList.add("opacity-0", "pointer-events-none");
+});
+
+document.getElementById("fittingForm").addEventListener("submit", function(e) {
+e.preventDefault();
+fittingModal.classList.add("opacity-0", "pointer-events-none");
+this.reset();
+showToast("Fitting appointment request confirmed.");
+});
+});
+</script>
+</body>
+</html>
